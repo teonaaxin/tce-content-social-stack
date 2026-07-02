@@ -110,6 +110,13 @@
   .card.violet .ic svg{stroke:var(--violet)}
   .card.violet .num{color:var(--violet)}
 
+  /* ---------- Instagram carousel preview ---------- */
+  .ig-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;width:100%}
+  .ig-item{aspect-ratio:1/1;border-radius:16px;overflow:hidden;border:1px solid var(--panel-brd);
+    background:var(--panel);transition:transform .35s ease, border-color .35s ease;}
+  .ig-item:hover{transform:translateY(-4px);border-color:rgba(246,226,6,.4)}
+  .ig-item img{width:100%;height:100%;object-fit:cover;display:block}
+
   .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:100px;
     background:var(--panel);border:1px solid var(--panel-brd);font-size:13px;color:var(--ink)}
   .pill svg{width:15px;height:15px;stroke:var(--yellow);fill:none;stroke-width:1.8}
@@ -206,6 +213,7 @@
     .slide{padding:48px 26px 96px}
     .two-col{grid-template-columns:1fr;gap:26px}
     .tl{grid-template-columns:repeat(2,1fr)}
+    .ig-grid{grid-template-columns:repeat(3,1fr)}
     .cover-foot{left:26px;right:26px}
   }
 </style>
@@ -427,11 +435,32 @@
     </div>
   </section>
 
-  <!-- ===== SLIDE 9 — WORKFLOW / APPROVAL ===== -->
+  <!-- ===== SLIDE 9 — SOCIAL EXAMPLE (IG CAROUSEL) ===== -->
+  <section class="slide" data-tag="Exemplu · Social">
+    <span class="pillar-badge"><span class="eyebrow" style="color:var(--cyan);border-color:rgba(56,225,198,.35);background:rgba(56,225,198,.07)"><span class="dot"></span>PILON 03</span></span>
+    <div class="slide-inner">
+      <div class="section-head">
+        <div class="kicker anim">08 — Din execuție, nu din teorie</div>
+        <h2 class="title anim">Un carusel Instagram, <span class="hl">produs integral de noi</span></h2>
+        <p class="lead anim">Exemplu real, pentru TCE Cargo: șase slide-uri, de la hook la CTA, cu identitate de brand consecventă pe tot parcursul. Exact genul de conținut pe care îl livrăm lunar prin instrumentul nostru.</p>
+      </div>
+      <div class="ig-grid anim">
+        <div class="ig-item"><img src="assets/carousel/tce-cargo-ig-01.jpg" alt="Slide 1: Ai marfă de trimis?"></div>
+        <div class="ig-item"><img src="assets/carousel/tce-cargo-ig-02.jpg" alt="Slide 2: Întârzieri, costuri ascunse, stres"></div>
+        <div class="ig-item"><img src="assets/carousel/tce-cargo-ig-03.jpg" alt="Slide 3: TCE Cargo, brand hero"></div>
+        <div class="ig-item"><img src="assets/carousel/tce-cargo-ig-04.jpg" alt="Slide 4: 55 euro per palet, 48h livrare, 100% acoperire"></div>
+        <div class="ig-item"><img src="assets/carousel/tce-cargo-ig-05.jpg" alt="Slide 5: Ridicăm azi, transport în 48h, livrare confirmată"></div>
+        <div class="ig-item"><img src="assets/carousel/tce-cargo-ig-06.jpg" alt="Slide 6: Cere ofertă azi"></div>
+      </div>
+      <p class="anim" style="margin-top:18px;color:var(--muted2);font-size:13.5px;font-style:italic">Hook → Problemă → Brand → Beneficii → Proces → CTA. Arcul narativ complet al unui carusel care convertește.</p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 10 — WORKFLOW / APPROVAL ===== -->
   <section class="slide" data-tag="Flux de lucru">
     <div class="slide-inner">
       <div class="section-head">
-        <div class="kicker anim">08 — Cum lucrăm împreună</div>
+        <div class="kicker anim">09 — Cum lucrăm împreună</div>
         <h2 class="title anim">Noi facem munca. <span class="hl">Tu păstrezi controlul.</span></h2>
         <p class="lead anim">Un flux clar, cu aprobare acolo unde o vrei. Pe SEO livrăm planul complet și îl executăm; pe social, tu dai unda verde finală când e nevoie.</p>
       </div>
@@ -449,11 +478,11 @@
     </div>
   </section>
 
-  <!-- ===== SLIDE 10 — DELIVERABLES ===== -->
+  <!-- ===== SLIDE 11 — DELIVERABLES ===== -->
   <section class="slide" data-tag="Livrabile">
     <div class="slide-inner">
       <div class="section-head">
-        <div class="kicker anim">09 — Ce livrăm</div>
+        <div class="kicker anim">10 — Ce livrăm</div>
         <h2 class="title anim">Tot ce intră în <span class="hl">stack</span></h2>
       </div>
       <div class="grid anim" style="grid-template-columns:repeat(4,1fr);gap:16px">
@@ -469,11 +498,11 @@
     </div>
   </section>
 
-  <!-- ===== SLIDE 11 — PROCESS TIMELINE ===== -->
+  <!-- ===== SLIDE 12 — PROCESS TIMELINE ===== -->
   <section class="slide" data-tag="Etape">
     <div class="slide-inner">
       <div class="section-head">
-        <div class="kicker anim">10 — Cum implementăm</div>
+        <div class="kicker anim">11 — Cum implementăm</div>
         <h2 class="title anim">De la audit la <span class="hl">scalare</span></h2>
         <p class="lead anim">Un parcurs în cinci etape, de la fundație la creștere continuă.</p>
       </div>
@@ -487,7 +516,7 @@
     </div>
   </section>
 
-  <!-- ===== SLIDE 12 — CLOSING ===== -->
+  <!-- ===== SLIDE 13 — CLOSING ===== -->
   <section class="slide" data-tag="Next steps">
     <span class="orb y"></span><span class="orb b"></span>
     <div class="slide-inner" style="text-align:center;position:relative;z-index:2">
