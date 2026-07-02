@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content &amp; Social Stack — Fullstapp × TCE Courier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07070c;
+    --bg2:#0d0d16;
+    --panel:rgba(255,255,255,.04);
+    --panel-brd:rgba(255,255,255,.09);
+    --ink:#f4f4f8;
+    --muted:#9aa0b4;
+    --muted2:#6b7189;
+    --yellow:#F6E206;
+    --yellow-soft:#fff27a;
+    --blue:#4c8dff;
+    --cyan:#38e1c6;
+    --violet:#9b7bff;
+    --radius:20px;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4,.font-display{font-family:'Space Grotesk',sans-serif;}
+
+  /* ---------- Deck frame ---------- */
+  #deck{position:fixed;inset:0;}
+  .slide{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    padding:64px 72px 92px;
+    opacity:0;visibility:hidden;
+    transform:translateY(24px) scale(.99);
+    transition:opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1), visibility .55s;
+    background:
+      radial-gradient(1100px 700px at 12% -10%, rgba(246,226,6,.10), transparent 55%),
+      radial-gradient(1000px 800px at 100% 110%, rgba(76,141,255,.14), transparent 55%),
+      linear-gradient(180deg,var(--bg),var(--bg2));
+    overflow:hidden;
+  }
+  .slide.active{opacity:1;visibility:visible;transform:none;}
+  .slide-inner{width:100%;max-width:var(--maxw);}
+
+  /* grain / vignette */
+  .slide::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    box-shadow:inset 0 0 240px rgba(0,0,0,.55);
+    mix-blend-mode:normal;
+  }
+
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'Space Grotesk';font-weight:600;
+    font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--yellow);
+    padding:8px 14px;border:1px solid rgba(246,226,6,.35);
+    border-radius:100px;background:rgba(246,226,6,.06);
+  }
+  .eyebrow.blue{color:var(--blue);border-color:rgba(76,141,255,.35);background:rgba(76,141,255,.07)}
+  .dot{width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+
+  .kicker{font-family:'Space Grotesk';font-weight:600;color:var(--muted);letter-spacing:.02em;font-size:15px;}
+  h2.title{font-size:clamp(30px,4vw,52px);line-height:1.04;font-weight:700;letter-spacing:-.02em;margin-top:18px;}
+  .title .hl{color:var(--yellow);}
+  .lead{color:var(--muted);font-size:clamp(15px,1.35vw,19px);line-height:1.55;max-width:760px;margin-top:16px;}
+
+  .grad-text{
+    background:linear-gradient(120deg,#fff 0%, var(--yellow-soft) 45%, var(--yellow) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+
+  /* ---------- Cards ---------- */
+  .grid{display:grid;gap:18px;}
+  .card{
+    background:var(--panel);border:1px solid var(--panel-brd);
+    border-radius:var(--radius);padding:24px;position:relative;
+    backdrop-filter:blur(6px);
+    transition:transform .4s ease, border-color .4s ease, background .4s;
+  }
+  .card:hover{transform:translateY(-4px);border-color:rgba(246,226,6,.4);background:rgba(255,255,255,.06)}
+  .card .num{font-family:'Space Grotesk';font-weight:700;font-size:13px;color:var(--yellow);letter-spacing:.1em}
+  .card h3{font-size:20px;font-weight:600;margin:12px 0 8px;letter-spacing:-.01em}
+  .card p{color:var(--muted);font-size:14.5px;line-height:1.55}
+  .card .ic{
+    width:46px;height:46px;border-radius:13px;display:grid;place-items:center;
+    background:linear-gradient(140deg,rgba(246,226,6,.16),rgba(246,226,6,.03));
+    border:1px solid rgba(246,226,6,.28);margin-bottom:6px;
+  }
+  .card .ic svg{width:24px;height:24px;stroke:var(--yellow);fill:none;stroke-width:1.7}
+  .card.blue .ic{background:linear-gradient(140deg,rgba(76,141,255,.16),rgba(76,141,255,.03));border-color:rgba(76,141,255,.3)}
+  .card.blue .ic svg{stroke:var(--blue)}
+  .card.blue .num{color:var(--blue)}
+  .card.blue:hover{border-color:rgba(76,141,255,.45)}
+  .card.cyan .ic{background:linear-gradient(140deg,rgba(56,225,198,.16),rgba(56,225,198,.03));border-color:rgba(56,225,198,.3)}
+  .card.cyan .ic svg{stroke:var(--cyan)}
+  .card.cyan .num{color:var(--cyan)}
+  .card.violet .ic{background:linear-gradient(140deg,rgba(155,123,255,.16),rgba(155,123,255,.03));border-color:rgba(155,123,255,.3)}
+  .card.violet .ic svg{stroke:var(--violet)}
+  .card.violet .num{color:var(--violet)}
+
+  .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:100px;
+    background:var(--panel);border:1px solid var(--panel-brd);font-size:13px;color:var(--ink)}
+  .pill svg{width:15px;height:15px;stroke:var(--yellow);fill:none;stroke-width:1.8}
+
+  .check{display:flex;gap:12px;align-items:flex-start;margin:14px 0}
+  .check .tick{flex:0 0 22px;width:22px;height:22px;border-radius:7px;background:rgba(246,226,6,.14);
+    border:1px solid rgba(246,226,6,.4);display:grid;place-items:center;margin-top:2px}
+  .check .tick svg{width:13px;height:13px;stroke:var(--yellow);fill:none;stroke-width:2.4}
+  .check p{color:var(--muted);font-size:15px;line-height:1.5}
+  .check p b{color:var(--ink);font-weight:600}
+
+  /* ---------- Cover ---------- */
+  .cover-wrap{text-align:left;position:relative;z-index:2}
+  .cover h1{font-size:clamp(46px,7.6vw,104px);line-height:.96;font-weight:700;letter-spacing:-.035em}
+  .cover .sub{font-size:clamp(16px,1.7vw,22px);color:var(--muted);margin-top:22px;max-width:620px;line-height:1.5}
+  .stackword{display:flex;flex-wrap:wrap;gap:0 .28em}
+  .cover-tags{display:flex;gap:12px;margin-top:34px;flex-wrap:wrap}
+  .cover-foot{position:absolute;left:72px;right:72px;bottom:70px;display:flex;justify-content:space-between;
+    align-items:center;color:var(--muted2);font-size:13px;font-family:'Space Grotesk';letter-spacing:.03em;z-index:2}
+  .brandline{display:flex;align-items:center;gap:14px;font-family:'Space Grotesk';font-weight:600;letter-spacing:.04em}
+  .cross{color:var(--yellow)}
+
+  /* orbiting glow on cover */
+  .orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;z-index:0}
+  .orb.y{width:360px;height:360px;background:var(--yellow);right:-40px;top:60px;opacity:.14}
+  .orb.b{width:420px;height:420px;background:var(--blue);left:-80px;bottom:-60px;opacity:.22}
+
+  /* ---------- Architecture diagram ---------- */
+  .arch{display:flex;flex-direction:column;align-items:center;gap:0;width:100%}
+  .node{background:var(--panel);border:1px solid var(--panel-brd);border-radius:12px;
+    padding:11px 16px;font-family:'Space Grotesk';font-weight:600;font-size:14px;text-align:center;min-width:120px}
+  .node.root{border-color:rgba(246,226,6,.5);background:rgba(246,226,6,.09);color:var(--yellow)}
+  .node.cat{border-color:rgba(76,141,255,.4);color:#cfe0ff;font-size:13px;min-width:0;padding:9px 12px}
+  .node.leaf{font-size:12px;color:var(--muted);font-weight:500;font-family:'Inter';padding:7px 10px;min-width:0}
+  .arch-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .connector{width:1px;height:26px;background:linear-gradient(var(--panel-brd),transparent)}
+  .lvl-label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-family:'Space Grotesk';font-weight:600}
+
+  /* ---------- Flow ---------- */
+  .flow{display:flex;align-items:stretch;gap:0;width:100%;flex-wrap:wrap}
+  .step{flex:1;min-width:150px;background:var(--panel);border:1px solid var(--panel-brd);border-radius:16px;padding:20px;position:relative}
+  .step .s-n{font-family:'Space Grotesk';font-weight:700;font-size:12px;color:var(--yellow);letter-spacing:.1em}
+  .step h4{font-size:16px;margin:10px 0 6px;font-weight:600}
+  .step p{color:var(--muted);font-size:13px;line-height:1.5}
+  .arrow{display:grid;place-items:center;color:var(--muted2);flex:0 0 30px}
+  .arrow svg{width:20px;height:20px;stroke:var(--muted2);fill:none;stroke-width:2}
+
+  /* timeline */
+  .tl{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;width:100%}
+  .tl .ph{background:var(--panel);border:1px solid var(--panel-brd);border-radius:16px;padding:20px;position:relative;overflow:hidden}
+  .tl .ph::before{content:"";position:absolute;left:0;top:0;height:3px;width:100%;
+    background:linear-gradient(90deg,var(--yellow),transparent)}
+  .tl .ph .p-n{font-family:'Space Grotesk';font-weight:700;color:var(--yellow);font-size:22px}
+  .tl .ph h4{font-size:15px;margin:8px 0 6px;font-weight:600}
+  .tl .ph p{color:var(--muted);font-size:12.5px;line-height:1.45}
+
+  .stat{display:flex;flex-direction:column;gap:4px}
+  .stat .big{font-family:'Space Grotesk';font-weight:700;font-size:clamp(28px,3.4vw,44px);color:var(--yellow);letter-spacing:-.02em}
+  .stat .lbl{color:var(--muted);font-size:13px}
+
+  /* ---------- Nav / chrome ---------- */
+  #progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--yellow),var(--yellow-soft));
+    z-index:50;transition:width .5s ease;box-shadow:0 0 14px rgba(246,226,6,.6)}
+  .nav{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:50;
+    display:flex;align-items:center;gap:16px;padding:9px 14px;border-radius:100px;
+    background:rgba(12,12,20,.7);border:1px solid var(--panel-brd);backdrop-filter:blur(12px)}
+  .nav button{width:38px;height:38px;border-radius:50%;border:1px solid var(--panel-brd);
+    background:var(--panel);color:var(--ink);cursor:pointer;display:grid;place-items:center;transition:.25s}
+  .nav button:hover{background:rgba(246,226,6,.16);border-color:var(--yellow)}
+  .nav button svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.2}
+  .dots{display:flex;gap:7px;align-items:center}
+  .dots i{width:7px;height:7px;border-radius:50%;background:var(--muted2);cursor:pointer;transition:.3s}
+  .dots i.on{background:var(--yellow);width:22px;border-radius:6px;box-shadow:0 0 10px rgba(246,226,6,.7)}
+  #counter{font-family:'Space Grotesk';font-weight:600;font-size:13px;color:var(--muted);min-width:44px;text-align:center}
+  .hint{position:fixed;bottom:30px;right:26px;z-index:50;color:var(--muted2);font-size:12px;
+    font-family:'Space Grotesk';letter-spacing:.04em}
+  .slide-tag{position:absolute;top:30px;right:34px;font-family:'Space Grotesk';font-weight:600;font-size:12px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);z-index:3}
+  .pillar-badge{position:absolute;top:28px;right:34px;z-index:3}
+
+  /* stagger animation */
+  .active .anim{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+  .active .anim:nth-child(1){animation-delay:.05s}
+  .active .anim:nth-child(2){animation-delay:.13s}
+  .active .anim:nth-child(3){animation-delay:.21s}
+  .active .anim:nth-child(4){animation-delay:.29s}
+  .active .anim:nth-child(5){animation-delay:.37s}
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+  .two-col{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;width:100%}
+  .section-head{margin-bottom:30px}
+
+  @media (max-width:920px){
+    .slide{padding:48px 26px 96px}
+    .two-col{grid-template-columns:1fr;gap:26px}
+    .tl{grid-template-columns:repeat(2,1fr)}
+    .cover-foot{left:26px;right:26px}
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="deck">
+
+  <!-- ===== SLIDE 1 — COVER ===== -->
+  <section class="slide active" data-tag="Cover">
+    <span class="orb y"></span><span class="orb b"></span>
+    <div class="slide-inner cover cover-wrap">
+      <div class="eyebrow anim"><span class="dot"></span>FULLSTAPP&nbsp; <span class="cross">×</span> &nbsp;TCE COURIER</div>
+      <h1 class="anim" style="margin-top:26px">
+        <span class="stackword"><span class="grad-text">Content &amp;</span></span>
+        <span class="stackword"><span class="grad-text">Social</span> <span class="hl" style="color:var(--yellow)">Stack</span></span>
+      </h1>
+      <p class="sub anim">Un singur sistem care construiește autoritate organică pentru TCE Courier: <b style="color:var(--ink)">SEO</b>, <b style="color:var(--ink)">conținut</b> și <b style="color:var(--ink)">social media</b> — proiectate, produse și rulate de noi.</p>
+      <div class="cover-tags anim">
+        <span class="pill"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg> SEO &amp; Arhitectură</span>
+        <span class="pill"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H4z"/><path d="M4 19h16"/></svg> Producție de conținut</span>
+        <span class="pill"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M6 20a6 6 0 0112 0"/></svg> Social Media Management</span>
+      </div>
+    </div>
+    <div class="cover-foot">
+      <div class="brandline">FULLSTAPP</div>
+      <div>Propunere de colaborare · 2026</div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 2 — OVERVIEW ===== -->
+  <section class="slide" data-tag="Overview">
+    <div class="slide-inner">
+      <div class="section-head">
+        <div class="kicker anim">01 — Privire de ansamblu</div>
+        <h2 class="title anim">Trei piloni, <span class="hl">un singur motor</span></h2>
+        <p class="lead anim">Nu vindem servicii separate. Construim un sistem integrat în care fiecare piesă alimentează autoritatea organică a brandului — de la structura URL-urilor până la ultima postare pe social.</p>
+      </div>
+      <div class="grid anim" style="grid-template-columns:repeat(3,1fr)">
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></div>
+          <div class="num">PILON 01</div>
+          <h3>Fundația SEO</h3>
+          <p>Recreăm întreaga arhitectură a site-ului și mapăm fiecare pagină pe termenii reali de căutare. Structură de autoritate, pe categorii și silozuri.</p>
+        </div>
+        <div class="card blue">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H4z"/><path d="M8 21h8M12 16v5"/></svg></div>
+          <div class="num">PILON 02</div>
+          <h3>Motorul de conținut</h3>
+          <p>Pagini generate cu sistemul nostru: imagini unice, widget-uri cu valoare reală, articole, ghiduri și video — totul optimizat pe intenție.</p>
+        </div>
+        <div class="card cyan">
+          <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M6 20a6 6 0 0112 0"/><path d="M19 8l2 2-2 2"/></svg></div>
+          <div class="num">PILON 03</div>
+          <h3>Amplificarea socială</h3>
+          <p>Distribuim conținutul pe social prin instrumentul nostru de management. Calendar editorial, producție și publicare — tu doar aprobi.</p>
+        </div>
+      </div>
+      <div class="anim" style="margin-top:22px;display:flex;align-items:center;gap:12px;color:var(--muted);font-size:14px">
+        <span class="pill" style="border-color:rgba(246,226,6,.35);color:var(--yellow)"><svg viewBox="0 0 24 24" style="stroke:var(--yellow)"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg> Alimentat de sistemele proprietare Fullstapp</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 3 — CHALLENGE ===== -->
+  <section class="slide" data-tag="Provocarea">
+    <div class="slide-inner two-col">
+      <div>
+        <div class="kicker anim">02 — De ce contează</div>
+        <h2 class="title anim">Traficul plătit <span class="hl">se termină</span> când oprești bugetul</h2>
+        <p class="lead anim">Piața de curierat e aglomerată și costul-per-click crește constant. Fiecare lead cumpărat prin reclame dispare în clipa în care nu mai plătești. Autoritatea organică lucrează invers: o construiești o dată și aduce clienți lună după lună.</p>
+        <div style="margin-top:26px" class="anim">
+          <div class="check"><span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></span><p><b>Independență de reclame</b> — clienți care te găsesc singuri, pe „curier ieftin", „ramburs internațional", „trimite colet în Europa".</p></div>
+          <div class="check"><span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></span><p><b>Cost descrescător pe lead</b> — pe măsură ce autoritatea crește, costul de achiziție scade.</p></div>
+          <div class="check"><span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></span><p><b>Un activ care rămâne al tău</b> — conținutul și paginile construite lucrează pentru brand permanent.</p></div>
+        </div>
+      </div>
+      <div class="grid anim" style="grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card"><div class="stat"><span class="big">25+</span><span class="lbl">ani de autoritate a brandului de valorificat organic</span></div></div>
+        <div class="card blue"><div class="stat"><span class="big" style="color:var(--blue)">~25</span><span class="lbl">țări de destinație = zeci de pagini geo-targetate</span></div></div>
+        <div class="card cyan"><div class="stat"><span class="big" style="color:var(--cyan)">100%</span><span class="lbl">din producție rulată de noi, gata de aprobat</span></div></div>
+        <div class="card violet"><div class="stat"><span class="big" style="color:var(--violet)">0</span><span class="lbl">dependență de cost-per-click pentru traficul organic</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 4 — SEO ARCHITECTURE ===== -->
+  <section class="slide" data-tag="Pilon 01 · SEO">
+    <span class="pillar-badge"><span class="eyebrow"><span class="dot"></span>PILON 01</span></span>
+    <div class="slide-inner">
+      <div class="section-head">
+        <div class="kicker anim">03 — Fundația SEO</div>
+        <h2 class="title anim">Reconstruim <span class="hl">întreaga arhitectură</span> pe termeni de căutare</h2>
+        <p class="lead anim">Fiecare URL este mapat pe căutări reale și organizat în silozuri tematice. Rezultatul: un spațiu de autoritate cu categorii clare, pe care Google îl înțelege și îl premiază.</p>
+      </div>
+      <div class="anim arch">
+        <div class="lvl-label" style="margin-bottom:10px">Nivel 0 · Domeniu</div>
+        <div class="node root">tcecourier.com</div>
+        <div class="connector"></div>
+        <div class="lvl-label" style="margin-bottom:10px">Nivel 1 · Categorii de autoritate</div>
+        <div class="arch-row">
+          <div class="node cat">Curier Național</div>
+          <div class="node cat">Curier Internațional</div>
+          <div class="node cat">Ecommerce &amp; Ramburs</div>
+          <div class="node cat">Fulfillment</div>
+        </div>
+        <div class="connector"></div>
+        <div class="lvl-label" style="margin-bottom:10px">Nivel 2 · Pagini pe termeni + Hub de conținut</div>
+        <div class="arch-row">
+          <div class="node leaf">trimite colet România</div>
+          <div class="node leaf">curier Germania</div>
+          <div class="node leaf">ramburs Europa</div>
+          <div class="node leaf">retur Shein/Temu</div>
+          <div class="node leaf">preț paleți</div>
+          <div class="node leaf">ghiduri &amp; blog</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 5 — PAGE GENERATION SYSTEM ===== -->
+  <section class="slide" data-tag="Pilon 01 · Sistem">
+    <span class="pillar-badge"><span class="eyebrow"><span class="dot"></span>PILON 01</span></span>
+    <div class="slide-inner">
+      <div class="section-head">
+        <div class="kicker anim">04 — Sistemul de generare a paginilor</div>
+        <h2 class="title anim">Fiecare pagină e o <span class="hl">experiență</span>, nu doar text</h2>
+        <p class="lead anim">Paginile sunt construite cu sistemul nostru, care produce automat imagini unice și widget-uri funcționale — valoare reală pentru vizitator și semnale puternice pentru motoarele de căutare.</p>
+      </div>
+      <div class="grid anim" style="grid-template-columns:repeat(3,1fr)">
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg></div>
+          <h3>Imagini unice per pagină</h3>
+          <p>Fără stock reciclat. Fiecare pagină primește vizualuri proprii, generate în identitatea TCE Courier — originalitate pe care Google o apreciază.</p>
+        </div>
+        <div class="card blue">
+          <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></div>
+          <h3>Widget-uri cu valoare</h3>
+          <p>Calculator de preț, tracking, estimator timp de livrare, carduri de țări. Instrumente care rețin vizitatorul și cresc conversia pe fiecare pagină.</p>
+        </div>
+        <div class="card cyan">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></div>
+          <h3>Optimizat pe intenție</h3>
+          <p>Structură, titluri și date structurate aliniate exact la ce caută utilizatorul — informațional, comercial sau tranzacțional.</p>
+        </div>
+      </div>
+      <p class="anim" style="margin-top:20px;color:var(--muted2);font-size:13.5px;font-style:italic">Exemplu: pagina „Curier ramburs Europa" primește automat un calculator de tarife, carduri de țări și un ghid de ambalare — o singură pagină care informează, calculează și convertește.</p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 6 — CONTENT PRODUCTION ===== -->
+  <section class="slide" data-tag="Pilon 02 · Conținut">
+    <span class="pillar-badge"><span class="eyebrow blue"><span class="dot"></span>PILON 02</span></span>
+    <div class="slide-inner two-col">
+      <div>
+        <div class="kicker anim">05 — Producția de conținut</div>
+        <h2 class="title anim">Conținut de calitate, <span class="hl">produs integral de noi</span></h2>
+        <p class="lead anim">Construim și rulăm un plan de conținut și un plan SEO complet. Tu primești execuția, nu temele pentru acasă.</p>
+        <div style="margin-top:24px" class="anim">
+          <div class="check"><span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></span><p><b>Articole, ghiduri și pagini de serviciu</b> scrise pe intenția reală de căutare.</p></div>
+          <div class="check"><span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></span><p><b>Imagini și video</b> originale, în identitatea brandului.</p></div>
+          <div class="check"><span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></span><p><b>Plan de conținut + plan SEO</b> complet, deținut și actualizat de noi.</p></div>
+        </div>
+      </div>
+      <div class="grid anim" style="grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card blue"><div class="ic"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><h3 style="font-size:17px">Articole &amp; ghiduri</h3><p>Conținut de autoritate care câștigă poziții.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg></div><h3 style="font-size:17px">Video</h3><p>Format scurt pentru engagement și social.</p></div>
+        <div class="card cyan"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 8h18"/></svg></div><h3 style="font-size:17px">Plan SEO</h3><p>Roadmap de termeni, priorități și cadență.</p></div>
+        <div class="card violet"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><h3 style="font-size:17px">Cadență</h3><p>Producție lună de lună, previzibilă.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 7 — BLOG / AUTHORITY HUB ===== -->
+  <section class="slide" data-tag="Pilon 02 · Hub">
+    <span class="pillar-badge"><span class="eyebrow blue"><span class="dot"></span>PILON 02</span></span>
+    <div class="slide-inner">
+      <div class="section-head">
+        <div class="kicker anim">06 — Hub de autoritate</div>
+        <h2 class="title anim">N-ai blog? <span class="hl">Îl construim noi.</span></h2>
+        <p class="lead anim">Hub-ul de conținut e motorul care aduce trafic informațional și îl transformă în comenzi. Îl adaptăm la infrastructura ta, indiferent de situație.</p>
+      </div>
+      <div class="grid anim" style="grid-template-columns:1fr 1fr;gap:18px">
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div>
+          <h3>Pe subdomeniu</h3>
+          <p><b style="color:var(--ink)">blog.tcecourier.com</b> — soluția rapidă, independentă de site-ul actual. Construim, găzduim și administrăm noi, fără să atingem infrastructura ta existentă.</p>
+        </div>
+        <div class="card blue">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 7h6l2 2h10v10H3z"/></svg></div>
+          <h3>Pe subfolder</h3>
+          <p><b style="color:var(--ink)">tcecourier.com/blog</b> — dacă ai echipă internă, integrăm hub-ul direct în domeniul principal, pentru autoritate SEO maximă.</p>
+        </div>
+      </div>
+      <p class="anim" style="margin-top:20px;color:var(--muted);font-size:14.5px">Ambele variante folosesc același sistem de generare a paginilor — cu imagini unice și widget-uri — și se conectează la arhitectura de categorii din Pilonul 01.</p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 8 — SOCIAL MEDIA ===== -->
+  <section class="slide" data-tag="Pilon 03 · Social">
+    <span class="pillar-badge"><span class="eyebrow" style="color:var(--cyan);border-color:rgba(56,225,198,.35);background:rgba(56,225,198,.07)"><span class="dot"></span>PILON 03</span></span>
+    <div class="slide-inner two-col">
+      <div>
+        <div class="kicker anim">07 — Social Media Management</div>
+        <h2 class="title anim">Social ca <span class="hl">extensie a conținutului</span></h2>
+        <p class="lead anim">Ce producem pentru SEO devine combustibil pentru social. Rulăm totul prin instrumentul nostru de management: creație, calendar, distribuție multi-canal — tu doar aprobi când vrei.</p>
+        <div style="margin-top:24px" class="anim">
+          <div class="check"><span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></span><p><b>Instrument propriu de management social</b> — planificare și publicare dintr-un singur loc.</p></div>
+          <div class="check"><span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></span><p><b>Noi generăm conținutul</b>, îl încărcăm, iar tu dai OK-ul final.</p></div>
+          <div class="check"><span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></span><p><b>Proces de aprobare opțional</b> — cât de implicat vrei să fii, decizi tu.</p></div>
+        </div>
+      </div>
+      <div class="grid anim" style="grid-template-columns:1fr 1fr;gap:14px">
+        <div class="card cyan"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></div><h3 style="font-size:16px">Calendar editorial</h3><p>Postări planificate lunar.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 12l16-7-7 16-2-7z"/></svg></div><h3 style="font-size:16px">Distribuție multi-canal</h3><p>Facebook, Instagram, LinkedIn, TikTok.</p></div>
+        <div class="card blue"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 4v16M6 10l6-6 6 6"/></svg></div><h3 style="font-size:16px">Amplificare</h3><p>Conținutul SEO reambalat pentru social.</p></div>
+        <div class="card violet"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></div><h3 style="font-size:16px">Aprobare 1-click</h3><p>Simplu, în instrumentul nostru.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 9 — WORKFLOW / APPROVAL ===== -->
+  <section class="slide" data-tag="Flux de lucru">
+    <div class="slide-inner">
+      <div class="section-head">
+        <div class="kicker anim">08 — Cum lucrăm împreună</div>
+        <h2 class="title anim">Noi facem munca. <span class="hl">Tu păstrezi controlul.</span></h2>
+        <p class="lead anim">Un flux clar, cu aprobare acolo unde o vrei. Pe SEO livrăm planul complet și îl executăm; pe social, tu dai unda verde finală când e nevoie.</p>
+      </div>
+      <div class="flow anim">
+        <div class="step"><div class="s-n">01</div><h4>Creație</h4><p>Producem conținut, pagini, imagini, video și postări sociale.</p></div>
+        <div class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="step"><div class="s-n">02</div><h4>Instrument Fullstapp</h4><p>Totul intră în platforma noastră de management, organizat și programat.</p></div>
+        <div class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="step"><div class="s-n">03</div><h4>Aprobare (opțional)</h4><p>Tu revizuiești și aprobi — sau ne lași să publicăm direct. Tu alegi.</p></div>
+        <div class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="step"><div class="s-n">04</div><h4>Publicare</h4><p>Publicăm pe site, blog și canalele sociale, la cadența stabilită.</p></div>
+        <div class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="step"><div class="s-n">05</div><h4>Raportare</h4><p>Rapoarte lunare: poziții, trafic, engagement și next steps.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 10 — DELIVERABLES ===== -->
+  <section class="slide" data-tag="Livrabile">
+    <div class="slide-inner">
+      <div class="section-head">
+        <div class="kicker anim">09 — Ce livrăm</div>
+        <h2 class="title anim">Tot ce intră în <span class="hl">stack</span></h2>
+      </div>
+      <div class="grid anim" style="grid-template-columns:repeat(4,1fr);gap:16px">
+        <div class="card"><div class="num">SEO</div><h3 style="font-size:16px">Arhitectură completă</h3><p>Structură URL pe categorii și silozuri.</p></div>
+        <div class="card"><div class="num">SEO</div><h3 style="font-size:16px">Plan SEO</h3><p>Termeni, priorități, cadență.</p></div>
+        <div class="card blue"><div class="num" style="color:var(--blue)">CONȚINUT</div><h3 style="font-size:16px">Plan de conținut</h3><p>Calendar editorial pe intenție.</p></div>
+        <div class="card blue"><div class="num" style="color:var(--blue)">CONȚINUT</div><h3 style="font-size:16px">Pagini cu widget-uri</h3><p>Generate cu sistemul nostru.</p></div>
+        <div class="card blue"><div class="num" style="color:var(--blue)">CONȚINUT</div><h3 style="font-size:16px">Imagini unice</h3><p>Vizualuri proprii per pagină.</p></div>
+        <div class="card blue"><div class="num" style="color:var(--blue)">CONȚINUT</div><h3 style="font-size:16px">Video</h3><p>Format scurt pentru web &amp; social.</p></div>
+        <div class="card cyan"><div class="num" style="color:var(--cyan)">SOCIAL</div><h3 style="font-size:16px">Calendar social</h3><p>Postări programate multi-canal.</p></div>
+        <div class="card violet"><div class="num" style="color:var(--violet)">RAPORT</div><h3 style="font-size:16px">Rapoarte lunare</h3><p>Poziții, trafic, engagement.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 11 — PROCESS TIMELINE ===== -->
+  <section class="slide" data-tag="Etape">
+    <div class="slide-inner">
+      <div class="section-head">
+        <div class="kicker anim">10 — Cum implementăm</div>
+        <h2 class="title anim">De la audit la <span class="hl">scalare</span></h2>
+        <p class="lead anim">Un parcurs în cinci etape, de la fundație la creștere continuă.</p>
+      </div>
+      <div class="tl anim">
+        <div class="ph"><div class="p-n">01</div><h4>Audit &amp; Arhitectură</h4><p>Analiză termeni, structură URL, plan de categorii și silozuri.</p></div>
+        <div class="ph"><div class="p-n">02</div><h4>Setup sistem &amp; blog</h4><p>Configurăm generatorul de pagini și hub-ul de conținut.</p></div>
+        <div class="ph"><div class="p-n">03</div><h4>Producție conținut</h4><p>Pagini, articole, imagini, video — la cadență.</p></div>
+        <div class="ph"><div class="p-n">04</div><h4>Publicare &amp; social</h4><p>Distribuție pe site, blog și canale sociale.</p></div>
+        <div class="ph"><div class="p-n">05</div><h4>Optimizare &amp; scalare</h4><p>Măsurăm, îmbunătățim, extindem pe noi termeni.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 12 — CLOSING ===== -->
+  <section class="slide" data-tag="Next steps">
+    <span class="orb y"></span><span class="orb b"></span>
+    <div class="slide-inner" style="text-align:center;position:relative;z-index:2">
+      <div class="anim" style="display:flex;justify-content:center"><div class="eyebrow"><span class="dot"></span>FULLSTAPP × TCE COURIER</div></div>
+      <h2 class="title anim grad-text" style="font-size:clamp(34px,5vw,66px);margin-top:20px;max-width:900px;margin-left:auto;margin-right:auto">Hai să construim autoritatea organică a TCE Courier.</h2>
+      <p class="lead anim" style="margin:22px auto 0;text-align:center">Un sistem care lucrează lună după lună: SEO, conținut și social, produse integral de noi — tu păstrezi controlul, noi aducem rezultatele.</p>
+      <div class="anim" style="display:flex;gap:14px;justify-content:center;margin-top:34px;flex-wrap:wrap">
+        <span class="pill" style="border-color:rgba(246,226,6,.4);color:var(--yellow)"><svg viewBox="0 0 24 24" style="stroke:var(--yellow)"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg> SEO</span>
+        <span class="pill" style="border-color:rgba(76,141,255,.4);color:var(--blue)"><svg viewBox="0 0 24 24" style="stroke:var(--blue)"><path d="M4 5h16v11H4z"/></svg> Conținut</span>
+        <span class="pill" style="border-color:rgba(56,225,198,.4);color:var(--cyan)"><svg viewBox="0 0 24 24" style="stroke:var(--cyan)"><circle cx="12" cy="8" r="3"/><path d="M6 20a6 6 0 0112 0"/></svg> Social Media</span>
+      </div>
+      <p class="anim" style="margin-top:40px;color:var(--muted2);font-family:'Space Grotesk';font-size:13px;letter-spacing:.05em">FULLSTAPP · Content &amp; Social Stack · 2026</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- ===== CHROME ===== -->
+<div class="nav">
+  <button id="prev" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+  <div class="dots" id="dots"></div>
+  <span id="counter">01 / 12</span>
+  <button id="next" aria-label="Următor"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+</div>
+<div class="hint">← / →  ·  spațiu  ·  F fullscreen</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const dotsWrap=document.getElementById('dots');
+  const counter=document.getElementById('counter');
+  const progress=document.getElementById('progress');
+  let i=0;
+  slides.forEach((_,n)=>{const d=document.createElement('i');d.onclick=()=>go(n);dotsWrap.appendChild(d);});
+  const dots=[...dotsWrap.children];
+  function go(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    dots.forEach((d,k)=>d.classList.toggle('on',k===i));
+    counter.textContent=String(i+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+    progress.style.width=((i+1)/slides.length*100)+'%';
+  }
+  function next(){go(i+1)} function prev(){go(i-1)}
+  document.getElementById('next').onclick=next;
+  document.getElementById('prev').onclick=prev;
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();next()}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev()}
+    else if(e.key==='Home')go(0); else if(e.key==='End')go(slides.length-1);
+    else if(e.key.toLowerCase()==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+  });
+  // touch swipe
+  let x0=null;
+  addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
+  addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>50){dx<0?next():prev()}x0=null;});
+  go(0);
+</script>
+</body>
+</html>
